@@ -1,9 +1,43 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:17.4'
+    container_name: postgresql
+    networks:
+    - app-network
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_USER: ${DB_AUTH_USERNAME}
+      POSTGRES_PASSWORD: ${DB_AUTH_PASSWORD}
+      POSTGRES_DB: ${DEFAULT_DB_NAME}
     ports:
-      - '5432'
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  matchsport-api:
+    build: .
+    container_name: matchsport-api
+    environment:
+          SPRING_PROFILES_ACTIVE: ${DEFAULT_ACTIVE_PROFILE}
+          SPRING_DATASOURCE_URL: ${APP_DATASOURCE_URL}
+          SPRING_DATASOURCE_USERNAME: ${DB_AUTH_USERNAME}
+          SPRING_DATASOURCE_PASSWORD: ${DB_AUTH_PASSWORD}
+          SPORTMATCH_APP_JWTSECRET: ${JWT_SECRET}
+          SPORTMATCH_APP_JWTEXPIRATIONMS: ${JWT_EXPIRATION_MS}
+
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./target:/app
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    restart: unless-stopped
+volumes:
+  postgres_data:
+
+networks:
+  app-network: {}

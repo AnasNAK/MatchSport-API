@@ -3,7 +3,6 @@ package NAK.MatchSport_API.Entity;
 import NAK.MatchSport_API.Enum.EventType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -51,7 +50,7 @@ public class Event {
 
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "eventImage",referencedColumnName = "id")
-    private CloudinaryImage eventImage;
+    private Media eventImage;
 
 
 }

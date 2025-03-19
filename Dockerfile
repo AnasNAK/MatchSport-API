@@ -4,6 +4,4 @@ WORKDIR /app
 
 COPY pom.xml .
 
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "MatchSport-API-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/app/MatchSport-API-0.0.1-SNAPSHOT.jar"]

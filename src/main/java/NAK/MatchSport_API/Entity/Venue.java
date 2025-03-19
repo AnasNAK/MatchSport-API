@@ -2,7 +2,6 @@ package NAK.MatchSport_API.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -38,5 +37,5 @@ public class Venue {
     private Event event;
 
     @OneToMany(mappedBy = "venue" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<CloudinaryImage> venueImagesList = new ArrayList<>();
+    private List<Media> venueImagesList = new ArrayList<>();
 }

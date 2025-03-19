@@ -2,7 +2,6 @@ package NAK.MatchSport_API.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class CloudinaryImage {
+public class Media {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long publicId;
+    private Long id;
 
     @Column(nullable = false , name = "url")
     private String url;

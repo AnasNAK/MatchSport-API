@@ -34,7 +34,7 @@ public class Participant extends User{
 
     @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
     @JoinColumn(name = "profileImage",referencedColumnName = "id")
-    private CloudinaryImage profileImage;
+    private Media profileImage;
 
     @OneToMany(mappedBy = "rater" ,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Rating> raterList = new ArrayList<>();
