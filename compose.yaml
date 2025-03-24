@@ -3,7 +3,7 @@ services:
     image: 'postgres:17.4'
     container_name: postgresql
     networks:
-    - app-network
+      - app-network
     environment:
       POSTGRES_USER: ${DB_AUTH_USERNAME}
       POSTGRES_PASSWORD: ${DB_AUTH_PASSWORD}
@@ -14,17 +14,33 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  redis:
+    image: 'redis:7.2-alpine'
+    container_name: redis
+    networks:
+      - app-network
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
   matchsport-api:
     build: .
     container_name: matchsport-api
     environment:
-          SPRING_PROFILES_ACTIVE: ${DEFAULT_ACTIVE_PROFILE}
-          SPRING_DATASOURCE_URL: ${APP_DATASOURCE_URL}
-          SPRING_DATASOURCE_USERNAME: ${DB_AUTH_USERNAME}
-          SPRING_DATASOURCE_PASSWORD: ${DB_AUTH_PASSWORD}
-          SPORTMATCH_APP_JWTSECRET: ${JWT_SECRET}
-          SPORTMATCH_APP_JWTEXPIRATIONMS: ${JWT_EXPIRATION_MS}
-
+      SPRING_PROFILES_ACTIVE: ${DEFAULT_ACTIVE_PROFILE}
+      SPRING_DATASOURCE_URL: ${APP_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_AUTH_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_AUTH_PASSWORD}
+      SPORTMATCH_APP_JWTSECRET: ${JWT_SECRET}
+      SPORTMATCH_APP_JWTEXPIRATIONMS: ${JWT_EXPIRATION_MS}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
     ports:
       - '8080:8080'
     volumes:
@@ -33,11 +49,15 @@ services:
       - .env
     depends_on:
       - postgres
+      - redis
     networks:
       - app-network
     restart: unless-stopped
+
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   app-network: {}
+

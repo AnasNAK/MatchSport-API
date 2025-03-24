@@ -14,26 +14,27 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , name = "content")
+    @Column(nullable = false, name = "content")
     private String content;
 
-    @Column(nullable = false , name = "createdAt")
+    @Column(nullable = false, name = "createdAt")
     private LocalDateTime createdAt;
 
     @Column(name = "isRead")
-    private boolean isRead;
+    private boolean read;
 
-    @Column(nullable = false,name = "type")
+    @Column(nullable = false, name = "type")
     private NotificationType type;
 
     @ManyToOne
     @JoinColumn(name = "participantId", nullable = false)
     private Participant participant;
-
 }
+
+

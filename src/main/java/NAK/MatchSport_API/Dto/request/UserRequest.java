@@ -1,27 +1,32 @@
-package NAK.MatchSport_API.Dto;
-
+package NAK.MatchSport_API.Dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Past;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
-public class RegisterRequest {
-    @NotBlank(message = "Name is required")
-    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
-    private String name;
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6, max = 40, message = "Password must be between 6 and 40 characters")
     private String password;
 
+    @NotBlank(message = "Full name is required")
+    private String fullName;
+
+    @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
+
     private String location;
 }
+

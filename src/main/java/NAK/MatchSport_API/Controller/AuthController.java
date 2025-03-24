@@ -1,11 +1,11 @@
 package NAK.MatchSport_API.Controller;
 
 
-
-import NAK.MatchSport_API.Dto.JwtResponse;
-import NAK.MatchSport_API.Dto.LoginRequest;
-import NAK.MatchSport_API.Dto.MessageResponse;
-import NAK.MatchSport_API.Dto.RegisterRequest;
+import NAK.MatchSport_API.Dto.request.LoginRequest;
+import NAK.MatchSport_API.Dto.request.RegisterRequest;
+import NAK.MatchSport_API.Dto.response.JwtResponse;
+import NAK.MatchSport_API.Dto.response.MessageResponse;
+import NAK.MatchSport_API.Dto.response.SimpleMessageResponse;
 import NAK.MatchSport_API.Service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<SimpleMessageResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(authService.registerUser(registerRequest));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<SimpleMessageResponse> logoutUser() {
+        return ResponseEntity.ok(authService.logoutUser());
     }
 }
