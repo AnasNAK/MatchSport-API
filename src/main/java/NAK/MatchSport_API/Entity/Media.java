@@ -10,17 +10,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Media {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , name = "url")
+    @Column(nullable = false, name = "url")
     private String url;
 
-    @Column(name = "format" ,nullable = false)
+    @Column(name = "format", nullable = false)
     private String format;
 
     @Column(name = "width")
@@ -30,12 +29,13 @@ public class Media {
     private Integer height;
 
     @OneToOne(mappedBy = "profileImage")
-    private Participant participant;
+    private User userImage;
 
     @OneToOne(mappedBy = "eventImage")
     private Event event;
 
     @ManyToOne
-    @JoinColumn(name = "venue" ,nullable = false)
+    @JoinColumn(name = "venue", nullable = true)
     private Venue venue;
 }
+

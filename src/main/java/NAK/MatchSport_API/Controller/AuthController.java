@@ -4,7 +4,6 @@ package NAK.MatchSport_API.Controller;
 import NAK.MatchSport_API.Dto.request.LoginRequest;
 import NAK.MatchSport_API.Dto.request.RegisterRequest;
 import NAK.MatchSport_API.Dto.response.JwtResponse;
-import NAK.MatchSport_API.Dto.response.MessageResponse;
 import NAK.MatchSport_API.Dto.response.SimpleMessageResponse;
 import NAK.MatchSport_API.Service.AuthService;
 import jakarta.validation.Valid;
@@ -30,7 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<SimpleMessageResponse> logoutUser() {
-        return ResponseEntity.ok(authService.logoutUser());
+    public ResponseEntity<SimpleMessageResponse> logoutUser(@RequestHeader(value = "Authorization", required = false) String token) {
+        return ResponseEntity.ok(authService.logoutUser(token));
     }
 }
+

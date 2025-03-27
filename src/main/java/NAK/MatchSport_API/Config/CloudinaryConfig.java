@@ -23,7 +23,6 @@ public class CloudinaryConfig {
 
     @Bean
     public Cloudinary cloudinary() {
-        // Only create Cloudinary bean if credentials are provided
         if (StringUtils.hasText(cloudName) && StringUtils.hasText(apiKey) && StringUtils.hasText(apiSecret)) {
             Map<String, String> config = new HashMap<>();
             config.put("cloud_name", cloudName);

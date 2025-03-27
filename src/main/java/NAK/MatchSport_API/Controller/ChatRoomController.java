@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,19 +23,23 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN') or hasRole('PARTICIPANT')")
     public ResponseEntity<List<ChatRoomResponse>> getAllChatRooms() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("User Roles: " + auth.getAuthorities());
+
         return ResponseEntity.ok(chatRoomService.getAllChatRooms());
     }
 
+
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<ChatRoomResponse> getChatRoomById(@PathVariable Long id) {
         return ResponseEntity.ok(chatRoomService.getChatRoomById(id));
     }
 
     @GetMapping("/event/{eventId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<ChatRoomResponse> getChatRoomByEventId(@PathVariable Long eventId) {
         return ResponseEntity.ok(chatRoomService.getChatRoomByEventId(eventId));
     }

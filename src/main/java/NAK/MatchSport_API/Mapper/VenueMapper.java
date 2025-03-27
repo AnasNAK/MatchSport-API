@@ -15,7 +15,7 @@ public interface VenueMapper {
     VenueMapper INSTANCE = Mappers.getMapper(VenueMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "event", ignore = true)
+    @Mapping(target = "events", ignore = true)
     @Mapping(target = "venueImagesList", ignore = true)
     Venue venueRequestToVenue(VenueRequest venueRequest);
 

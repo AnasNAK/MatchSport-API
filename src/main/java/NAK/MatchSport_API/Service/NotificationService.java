@@ -45,7 +45,7 @@ public class NotificationService {
         Participant participant = participantRepository.findByEmail(currentUserEmail)
                 .orElseThrow(() -> new RuntimeException("Current user not found"));
 
-        List<Notification> notifications = notificationRepository.findByParticipantIdAndIsReadFalseOrderByCreatedAtDesc(participant.getId());
+        List<Notification> notifications = notificationRepository.findByParticipantIdAndReadFalseOrderByCreatedAtDesc(participant.getId());
         return notificationMapper.notificationsToNotificationResponses(notifications);
     }
 

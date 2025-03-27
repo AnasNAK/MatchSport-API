@@ -33,8 +33,8 @@ public class Venue {
     @Column(name = "endTime", nullable = false)
     private LocalDateTime endTime;
 
-    @OneToOne(mappedBy = "venue")
-    private Event event;
+    @OneToMany(mappedBy = "venue")
+    private List<Event> events = new ArrayList<>();
 
     @OneToMany(mappedBy = "venue" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<Media> venueImagesList = new ArrayList<>();

@@ -20,12 +20,10 @@ public class AvailabilityParticipant {
 
     @ManyToOne
     @MapsId("availabilityId")
-    @JoinColumn(name = "availabilityId")
     private Availability availability;
 
     @ManyToOne
     @MapsId("participantId")
-    @JoinColumn(name = "participantId")
     private Participant participant;
 
 

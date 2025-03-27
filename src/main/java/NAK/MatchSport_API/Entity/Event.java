@@ -44,8 +44,8 @@ public class Event {
     @OneToOne(mappedBy = "event")
     private ChatRoom chatRoom;
 
-    @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
-    @JoinColumn(name = "venueId",referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "venueId")
     private Venue venue;
 
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)

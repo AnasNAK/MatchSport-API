@@ -45,18 +45,25 @@ public class MediaService {
 
     @Transactional
     public MediaResponse uploadMedia(MultipartFile file) throws IOException {
-        // Upload file to Cloudinary
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        try {
+            // Upload file to Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
 
-        // Create media entity
-        Media media = new Media();
-        media.setUrl((String) uploadResult.get("url"));
-        media.setFormat((String) uploadResult.get("format"));
-        media.setWidth(((Number) uploadResult.get("width")).intValue());
-        media.setHeight(((Number) uploadResult.get("height")).intValue());
+            // Create media entity
+            Media media = new Media();
+            media.setUrl((String) uploadResult.get("url"));
+            media.setFormat((String) uploadResult.get("format"));
+            media.setWidth(((Number) uploadResult.get("width")).intValue());
+            media.setHeight(((Number) uploadResult.get("height")).intValue());
+            // Don't set venue here since it's now nullable
 
-        Media savedMedia = mediaRepository.save(media);
-        return mediaMapper.mediaToMediaResponse(savedMedia);
+            Media savedMedia = mediaRepository.save(media);
+            return mediaMapper.mediaToMediaResponse(savedMedia);
+        } catch (Exception e) {
+            // Log the detailed error
+            e.printStackTrace();
+            throw e; // Re-throw to propagate to controller
+        }
     }
 
     @Transactional
@@ -86,26 +93,37 @@ public class MediaService {
 
     @Transactional
     public MediaResponse setProfileImage(Long mediaId) {
-        // Get current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserEmail = authentication.getName();
+        try {
+            // Get current authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentUserEmail = authentication.getName();
 
-        Participant participant = participantRepository.findByEmail(currentUserEmail)
-                .orElseThrow(() -> new RuntimeException("Current user not found"));
+            Participant participant = participantRepository.findByEmail(currentUserEmail)
+                    .orElseThrow(() -> new RuntimeException("Current user not found"));
 
-        Media media = mediaRepository.findById(mediaId)
-                .orElseThrow(() -> new RuntimeException("Media not found with id: " + mediaId));
+            Media media = mediaRepository.findById(mediaId)
+                    .orElseThrow(() -> new RuntimeException("Media not found with id: " + mediaId));
 
-        // Remove old profile image if exists
-        if (participant.getProfileImage() != null) {
-            participant.getProfileImage().setParticipant(null);
+            // Remove old profile image if exists
+            if (participant.getProfileImage() != null) {
+                Media oldImage = participant.getProfileImage();
+                oldImage.setUserImage(null);
+                participant.setProfileImage(null);
+                mediaRepository.save(oldImage);
+            }
+
+            // Set new profile image
+            media.setUserImage(participant);
+            participant.setProfileImage(media);
+
+            participantRepository.save(participant);
+            Media savedMedia = mediaRepository.save(media);
+            return mediaMapper.mediaToMediaResponse(savedMedia);
+        } catch (Exception e) {
+            // Log the detailed error
+            e.printStackTrace();
+            throw e; // Re-throw to propagate to controller
         }
-
-        media.setParticipant(participant);
-        participant.setProfileImage(media);
-
-        Media savedMedia = mediaRepository.save(media);
-        return mediaMapper.mediaToMediaResponse(savedMedia);
     }
 
     @Transactional
@@ -124,13 +142,10 @@ public class MediaService {
     }
 
     private String extractPublicIdFromUrl(String url) {
-        // Example URL: https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg
-        // Public ID: sample
 
         String[] urlParts = url.split("/");
         String fileNameWithExtension = urlParts[urlParts.length - 1];
         return fileNameWithExtension.substring(0, fileNameWithExtension.lastIndexOf('.'));
     }
 }
-
 

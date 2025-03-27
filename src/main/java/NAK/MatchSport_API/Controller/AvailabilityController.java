@@ -26,13 +26,13 @@ public class AvailabilityController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<List<AvailabilityResponse>> getAvailabilitiesForCurrentUser() {
         return ResponseEntity.ok(availabilityService.getAvailabilitiesForCurrentUser());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<AvailabilityResponse> getAvailabilityById(@PathVariable Long id) {
         return ResponseEntity.ok(availabilityService.getAvailabilityById(id));
     }
@@ -57,13 +57,13 @@ public class AvailabilityController {
     }
 
     @PostMapping("/{availabilityId}/participants/{participantId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<AvailabilityResponse> addParticipantToAvailability(@PathVariable Long availabilityId, @PathVariable Long participantId) {
         return ResponseEntity.ok(availabilityService.addParticipantToAvailability(availabilityId, participantId));
     }
 
     @DeleteMapping("/{availabilityId}/participants/{participantId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<AvailabilityResponse> removeParticipantFromAvailability(@PathVariable Long availabilityId, @PathVariable Long participantId) {
         return ResponseEntity.ok(availabilityService.removeParticipantFromAvailability(availabilityId, participantId));
     }

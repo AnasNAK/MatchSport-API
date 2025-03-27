@@ -3,24 +3,30 @@ package NAK.MatchSport_API.Security.service;
 
 import NAK.MatchSport_API.Entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public class UserDetailsImpl implements UserDetails {
+    @Serial
     private static final long serialVersionUID = 1L;
 
+    @Getter
     private Long id;
+    @Getter
     private String email;
     @JsonIgnore
     private String password;
+    @Getter
     private String fullName;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String email, String password, String fullName,
                            Collection<? extends GrantedAuthority> authorities) {
@@ -34,12 +40,13 @@ public class UserDetailsImpl implements UserDetails {
     public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // Determine role based on user type
         if (user.getClass().getSimpleName().equals("SuperAdmin")) {
             authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN"));
         } else if (user.getClass().getSimpleName().equals("Admin")) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else {
+        } else if (user.getClass().getSimpleName().equals("Participant")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PARTICIPANT"));
+        }else {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
 
@@ -56,14 +63,6 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     @Override
     public String getPassword() {
         return password;
@@ -72,10 +71,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return email;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     @Override

@@ -37,5 +37,8 @@ public class User {
     @Column(name = "location")
     private String location;
 
+    @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
+    @JoinColumn(name = "profileImage",referencedColumnName = "id")
+    private Media profileImage;
 
 }

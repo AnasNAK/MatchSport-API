@@ -1,6 +1,5 @@
 package NAK.MatchSport_API.Service;
 
-
 import NAK.MatchSport_API.Dto.request.LoginRequest;
 import NAK.MatchSport_API.Dto.request.RegisterRequest;
 import NAK.MatchSport_API.Dto.response.JwtResponse;
@@ -22,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +35,9 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final ParticipantMapper participantMapper;
+
+    // Set to store invalidated tokens
+    private final Set<String> blacklistedTokens = new HashSet<>();
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -69,8 +73,30 @@ public class AuthService {
         return new SimpleMessageResponse("User registered successfully!");
     }
 
+    public SimpleMessageResponse logoutUser(String token) {
+        // Extract token from Authorization header if needed
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // Add token to blacklist
+        if (token != null && !token.isEmpty()) {
+            blacklistedTokens.add(token);
+        }
+
+        // Clear security context
+        SecurityContextHolder.clearContext();
+        return new SimpleMessageResponse("Logout successful!");
+    }
+
     public SimpleMessageResponse logoutUser() {
         SecurityContextHolder.clearContext();
         return new SimpleMessageResponse("Logout successful!");
     }
+
+
+    public boolean isTokenBlacklisted(String token) {
+        return blacklistedTokens.contains(token);
+    }
 }
+

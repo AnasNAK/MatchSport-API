@@ -15,10 +15,10 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     Page<Notification> findByParticipantIdOrderByCreatedAtDesc(Long participantId, Pageable pageable);
 
-    List<Notification> findByParticipantIdAndIsReadFalseOrderByCreatedAtDesc(Long participantId);
+    List<Notification> findByParticipantIdAndReadFalseOrderByCreatedAtDesc(Long participantId);
 
     @Modifying
-    @Query("UPDATE Notification n SET n.isRead = true WHERE n.participant.id = :participantId AND n.isRead = false")
+    @Query("UPDATE Notification n SET n.read = true WHERE n.participant.id = :participantId AND n.read = false")
     void markAllAsReadForParticipant(@Param("participantId") Long participantId);
 }
 

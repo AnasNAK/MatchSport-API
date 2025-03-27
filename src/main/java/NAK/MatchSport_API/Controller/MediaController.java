@@ -34,7 +34,7 @@ public class MediaController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<MediaResponse> uploadMedia(@RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(mediaService.uploadMedia(file));
     }
@@ -53,7 +53,7 @@ public class MediaController {
     }
 
     @PostMapping("/profile/{mediaId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<MediaResponse> setProfileImage(@PathVariable Long mediaId) {
         return ResponseEntity.ok(mediaService.setProfileImage(mediaId));
     }

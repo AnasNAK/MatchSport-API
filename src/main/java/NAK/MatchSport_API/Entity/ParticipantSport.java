@@ -22,13 +22,11 @@ public class ParticipantSport {
 
     @ManyToOne
     @MapsId("participantId")
-    @JoinColumn(name = "participantId")
     private Participant participant;
 
 
     @ManyToOne
     @MapsId("sportId")
-    @JoinColumn(name = "sportId")
     private Sport sport;
 
     @Column(nullable = false ,name = "level")

@@ -15,7 +15,7 @@ public interface MediaMapper {
     MediaMapper INSTANCE = Mappers.getMapper(MediaMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "participant", ignore = true)
+    @Mapping(target = "userImage", ignore = true)
     @Mapping(target = "event", ignore = true)
     @Mapping(target = "venue", ignore = true)
     Media mediaRequestToMedia(MediaRequest mediaRequest);

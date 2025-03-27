@@ -15,4 +15,5 @@ public class UserResponse {
     private String fullName;
     private LocalDate dateOfBirth;
     private String location;
+    private MediaResponse profileImage;
 }

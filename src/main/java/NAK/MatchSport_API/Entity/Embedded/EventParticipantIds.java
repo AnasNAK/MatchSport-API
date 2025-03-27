@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 
 public class EventParticipantIds implements Serializable {
 

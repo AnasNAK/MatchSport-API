@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resrvation")
+@Table(name = "reservation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,12 +31,10 @@ public class Reservation {
 
     @ManyToOne
     @MapsId("eventId")
-    @JoinColumn(name = "eventId")
     private Event event;
 
     @ManyToOne
     @MapsId("participantId")
-    @JoinColumn(name = "participant")
     private Participant participant;
 
 }

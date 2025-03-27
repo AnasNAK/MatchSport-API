@@ -31,19 +31,19 @@ public class RatingController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<RatingResponse> rateParticipant(@Valid @RequestBody RatingRequest ratingRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ratingService.rateParticipant(ratingRequest));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<RatingResponse> updateRating(@PathVariable Long id, @Valid @RequestBody RatingRequest ratingRequest) {
         return ResponseEntity.ok(ratingService.updateRating(id, ratingRequest));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<Void> deleteRating(@PathVariable Long id) {
         ratingService.deleteRating(id);
         return ResponseEntity.noContent().build();
